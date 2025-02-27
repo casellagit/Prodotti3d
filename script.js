@@ -7,7 +7,7 @@ let videoTexture = null;
 // Attende che il custom element 'model-viewer' sia definito
 customElements.whenDefined('model-viewer').then(() => {
     // Crea una texture video utilizzando il file fiamma_transparente.webm
-    videoTexture = modelViewerAnimated.createVideoTexture("./fiamma_transparente.webm");
+    videoTexture = modelViewerAnimated.createVideoTexture("./fiamma_trasparente.webm");
 });
 
 // Aggiunge un listener per l'evento 'load' del model-viewer
