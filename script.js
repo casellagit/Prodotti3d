@@ -1,13 +1,21 @@
 // Seleziona l'elemento model-viewer con l'id "animated"
 const modelViewerAnimated = document.querySelector("model-viewer#animated");
 
-// Inizializza la variabile per la texture video
+// Inizializza la variabile per la texture video o immagine
 let videoTexture = null;
+
+// Controlla se il browser è Safari su iPhone/iPad
+const isIOS = /iPhone|iPad/i.test(navigator.userAgent);
 
 // Attende che il custom element 'model-viewer' sia definito
 customElements.whenDefined('model-viewer').then(() => {
-    // Crea una texture video utilizzando il file fiamma_transparente.webm
-    videoTexture = modelViewerAnimated.createVideoTexture("./output0103.webm");
+    if (isIOS) {
+        // Usa una texture immagine APNG per Safari su iPhone/iPad
+        videoTexture = modelViewerAnimated.createTexture("./fiamma.apng");
+    } else {
+        // Usa la texture video WebM per tutti gli altri browser
+        videoTexture = modelViewerAnimated.createVideoTexture("./fiamma_trasparente.webm");
+    }
 });
 
 // Aggiunge un listener per l'evento 'load' del model-viewer
@@ -15,13 +23,13 @@ modelViewerAnimated.addEventListener("load", async () => {
     // Trova il materiale chiamato "Fiamma" nel modello
     const material = modelViewerAnimated.model.materials.find(mat => mat.name === "Fiamma");
     if (!material) {
-        console.error("Material 'Fiamma' not found!"); // Logga un errore se il materiale non viene trovato
-        return; // Esci dalla funzione se il materiale non esiste
+        console.error("Material 'Fiamma' not found!");
+        return;
     }
     
     // Ottiene la texture di base del materiale
     const { baseColorTexture } = material.pbrMetallicRoughness;
-    // Imposta la texture video come texture di base del materiale
+    // Imposta la texture video o immagine come texture di base del materiale
     baseColorTexture.setTexture(videoTexture);
     
     // Imposta il modo alpha del materiale per supportare la trasparenza
@@ -41,11 +49,10 @@ function changeColor(color) {
     // Trova il materiale chiamato "Antracite #1" nel modello
     const material = modelViewerAnimated.model.materials.find(mat => mat.name === "Antracite #1");
     if (!material) {
-        console.error("Material 'Antracite' not found!"); // Logga un errore se il materiale non viene trovato
-        return; // Esci dalla funzione se il materiale non esiste
+        console.error("Material 'Antracite' not found!");
+        return;
     }
     
     // Imposta il colore di base del materiale
     material.pbrMetallicRoughness.setBaseColorFactor(color);
 }
-
