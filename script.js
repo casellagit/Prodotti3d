@@ -12,6 +12,16 @@ customElements.whenDefined('model-viewer').then(() => {
     if (isIOS) {
         // Usa una texture immagine APNG per Safari su iPhone/iPad
         videoTexture = modelViewerAnimated.createTexture("./fiamma.apng");
+
+        console.log("Safari iOS rilevato: attivando il reload della texture APNG.");
+        
+        // Forza il reload della texture ogni 100ms
+        setInterval(() => {
+            const material = modelViewerAnimated.model.materials.find(mat => mat.name === "Fiamma");
+            if (material && material.pbrMetallicRoughness.baseColorTexture) {
+                material.pbrMetallicRoughness.baseColorTexture.texture.source.setURI("./fiamma.apng");
+            }
+        }, 100);
     } else {
         // Usa la texture video WebM per tutti gli altri browser
         videoTexture = modelViewerAnimated.createVideoTexture("./fiamma_trasparente.webm");
